@@ -1,0 +1,489 @@
+---
+title: "Problem Set-1"
+author: "Aravind Mannarswamy"
+date: "8/29/2021"
+output:
+  pdf_document:
+    fig_caption: yes
+    fig_height: 4
+    fig_width: 6
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+---
+
+\newpage  
+
+# Simple Exchange Economy    
+
+Total Wigs = 16  
+Total Suits = 12  
+
+## Edgeworth box   
+
+```{r header, echo = FALSE, message = FALSE, warning = FALSE}
+library(knitr)
+knitr::opts_chunk$set(cache = TRUE,echo = FALSE, message = FALSE, warning = FALSE, cache.lazy = FALSE, fig.align = "center", fig.width = 6, fig.height = 4)
+library(tidyverse)
+library(magrittr)
+```
+
+
+```{r}
+
+wigs_m = seq(0,16)
+suits_m = seq(0,12)
+
+
+df = data.frame(expand.grid(wigs_m = wigs_m, suits_m = suits_m)) %>% 
+  mutate(wigs_j = 16 - wigs_m,
+         suits_j = 12 - suits_m,
+         utility_m = 2 * wigs_m^2 * suits_m,
+         utility_j = 3 * wigs_j * suits_j)
+
+
+
+```
+
+
+
+```{r}
+library(metR)
+df %>% 
+  ggplot()+
+  aes(x = wigs_m, y = suits_m, z = utility_m)+
+  geom_contour(color = "blue")+
+  geom_contour(aes(x = 16-wigs_j, y = 12-suits_j, z = utility_j), color = "red")+
+  geom_text_contour(color = "blue")+
+  geom_text_contour(aes(x = 16-wigs_j, y = 12-suits_j, z = utility_j), color = "red")+
+  theme_bw()+
+  theme(panel.grid = element_blank(),
+        axis.title=element_blank(),
+        axis.text=element_blank())+
+  scale_x_continuous(breaks = seq(0,16,2), limits = c(-2,18) )+
+  scale_y_continuous(breaks = seq(0,12,2), limits = c(-2,14))+
+  annotate(geom = "point",x = 12, y = 4, color = "red", size = 3)+
+  annotate(geom = "text", x = 12, y = 3.5,label = "w", size = 10)+
+  annotate(geom = "text", x = seq(0,16,2), y = 12.5, label = seq(16,0,-2), color = "red")+
+  annotate(geom = "text", x = seq(0,16,2), y = -0.5, label = seq(0,16,2), color = "blue")+
+  annotate(geom = "text", y = seq(0,12,2), x = 16.5, label = seq(12,0,-2), color = "red")+
+  annotate(geom = "text", y = seq(0,12,2), x = -0.5, label = seq(0,12,2), color = "blue")+
+  annotate(geom = "rect", xmin = 0, ymin = 0, xmax = 16, ymax = 12, color = "grey", fill = NA)+
+  annotate(geom = "text", x = -1, y = -1, label = "Om", color = "blue")+
+  annotate(geom = "text", x = 17, y = 13, label = "Oj", color = "red")+
+  annotate(geom = "text", x = 3, y = -1.5, label = "Moira's increasing wigs", color = "blue")+
+  geom_segment(aes(x = 6, y = -1.5, xend = 9, yend = -1.5), arrow = arrow(length = unit(0.5, "cm")), color = "blue")+
+  annotate(geom = "text", x = 13, y = 13.5, label = "Johnny's increasing wigs", color = "red")+
+  geom_segment(aes(x = 10, y = 13.5, xend = 7, yend = 13.5), arrow = arrow(length = unit(0.5, "cm")), color = "red")+
+  annotate(geom = "text", x = -1.5, y = 3, label = "Moira's increasing suits", color = "blue", angle = 90)+
+  geom_segment(aes(x = -1.5, y = 7, xend = -1.5, yend = 10), arrow = arrow(length = unit(0.5, "cm")), color = "blue")+
+  annotate(geom = "text", x = 17.5, y = 8, label = "Johnny's increasing suits", color = "red", angle = 270)+
+  geom_segment(aes(x = 17.5, y =4, xend = 17.5, yend = 2), arrow = arrow(length = unit(0.5, "cm")), color = "red")
+
+```
+
+
+## Not a pareto efficient point   
+
+
+```{r}
+moira_wigs = seq(0,16,0.1)
+m_utility_at_endow = 1152
+moira_suits = m_utility_at_endow/(2*moira_wigs^2)
+
+johnny_wigs = 16 - moira_wigs
+j_utility_at_endow = 96
+johnny_suits = j_utility_at_endow/(3*johnny_wigs)
+
+ggplot()+
+  aes(x = moira_wigs, y = moira_suits)+
+  geom_line(color = "blue")+
+  geom_line(aes(x = 16-johnny_wigs, y = 12-johnny_suits), color = "red")+
+  # scale_x_continuous(limits = c(0,16))+
+  # scale_y_continuous(limits = c(0,12))+
+  theme_bw()+
+  theme(panel.grid = element_blank(),
+        axis.title=element_blank(),
+        axis.text=element_blank())+
+  scale_x_continuous(breaks = seq(0,16,2), limits = c(-2,18) )+
+  scale_y_continuous(breaks = seq(0,12,2), limits = c(-2,14))+
+  annotate(geom = "point",x = 12, y = 4, color = "red", size = 3)+
+  annotate(geom = "text", x = 12, y = 3.5,label = "w", size = 10)+
+  annotate(geom = "text", x = seq(0,16,2), y = 12.5, label = seq(16,0,-2), color = "red")+
+  annotate(geom = "text", x = seq(0,16,2), y = -0.5, label = seq(0,16,2), color = "blue")+
+  annotate(geom = "text", y = seq(0,12,2), x = 16.5, label = seq(12,0,-2), color = "red")+
+  annotate(geom = "text", y = seq(0,12,2), x = -0.5, label = seq(0,12,2), color = "blue")+
+  annotate(geom = "rect", xmin = 0, ymin = 0, xmax = 16, ymax = 12, color = "grey", fill = NA)+
+  annotate(geom = "text", x = -1, y = -1, label = "Om", color = "blue")+
+  annotate(geom = "text", x = 17, y = 13, label = "Oj", color = "red")+
+  annotate(geom = "text", x = 3, y = -1.5, label = "Moira's increasing wigs", color = "blue")+
+  geom_segment(aes(x = 6, y = -1.5, xend = 9, yend = -1.5), arrow = arrow(length = unit(0.5, "cm")), color = "blue")+
+  annotate(geom = "text", x = 13, y = 13.5, label = "Johnny's increasing wigs", color = "red")+
+  geom_segment(aes(x = 10, y = 13.5, xend = 7, yend = 13.5), arrow = arrow(length = unit(0.5, "cm")), color = "red")+
+  annotate(geom = "text", x = -1.5, y = 3, label = "Moira's increasing suits", color = "blue", angle = 90)+
+  geom_segment(aes(x = -1.5, y = 7, xend = -1.5, yend = 10), arrow = arrow(length = unit(0.5, "cm")), color = "blue")+
+  annotate(geom = "text", x = 17.5, y = 8, label = "Johnny's increasing suits", color = "red", angle = 270)+
+  geom_segment(aes(x = 17.5, y =4, xend = 17.5, yend = 2), arrow = arrow(length = unit(0.5, "cm")), color = "red")
+  
+
+```
+
+
+## Pareto Improvement   
+
+```{r}
+moira_wigs = seq(0,16,0.1)
+m_utility_at_endow = 1152
+moira_suits = m_utility_at_endow/(2*moira_wigs^2)
+
+johnny_wigs = 16 - moira_wigs
+j_utility_at_endow = 96
+johnny_suits = j_utility_at_endow/(3*johnny_wigs)
+
+
+j_wigs = seq(0,16,0.1)
+j_suits = 111.7959/(3 * j_wigs)
+
+
+ggplot()+
+  aes(x = moira_wigs, y = moira_suits)+
+  geom_line(color = "blue")+
+  geom_line(aes(x = 16-johnny_wigs, y = 12-johnny_suits), color = "red")+
+  geom_line(aes(x = 16-j_wigs, y = 12-j_suits), color = "red", linetype = "dashed")+
+  theme_bw()+
+  theme(panel.grid = element_blank(),
+        axis.title=element_blank(),
+        axis.text=element_blank())+
+  scale_x_continuous(breaks = seq(0,16,2), limits = c(-2,18) )+
+  scale_y_continuous(breaks = seq(0,12,2), limits = c(-2,14))+
+  annotate(geom = "point",x = 12, y = 4, color = "red", size = 3)+
+  annotate(geom = "text", x = 12, y = 3.5,label = "w", size = 10)+
+  annotate(geom = "text", x = seq(0,16,2), y = 12.5, label = seq(16,0,-2), color = "red")+
+  annotate(geom = "text", x = seq(0,16,2), y = -0.5, label = seq(0,16,2), color = "blue")+
+  annotate(geom = "text", y = seq(0,12,2), x = 16.5, label = seq(12,0,-2), color = "red")+
+  annotate(geom = "text", y = seq(0,12,2), x = -0.5, label = seq(0,12,2), color = "blue")+
+  annotate(geom = "rect", xmin = 0, ymin = 0, xmax = 16, ymax = 12, color = "grey", fill = NA)+
+  annotate(geom = "text", x = -1, y = -1, label = "Om", color = "blue")+
+  annotate(geom = "text", x = 17, y = 13, label = "Oj", color = "red")+
+  annotate(geom = "text", x = 3, y = -1.5, label = "Moira's increasing wigs", color = "blue")+
+  geom_segment(aes(x = 6, y = -1.5, xend = 9, yend = -1.5), arrow = arrow(length = unit(0.5, "cm")), color = "blue")+
+  annotate(geom = "text", x = 13, y = 13.5, label = "Johnny's increasing wigs", color = "red")+
+  geom_segment(aes(x = 10, y = 13.5, xend = 7, yend = 13.5), arrow = arrow(length = unit(0.5, "cm")), color = "red")+
+  annotate(geom = "text", x = -1.5, y = 3, label = "Moira's increasing suits", color = "blue", angle = 90)+
+  geom_segment(aes(x = -1.5, y = 7, xend = -1.5, yend = 10), arrow = arrow(length = unit(0.5, "cm")), color = "blue")+
+  annotate(geom = "text", x = 17.5, y = 8, label = "Johnny's increasing suits", color = "red", angle = 270)+
+  geom_segment(aes(x = 17.5, y =4, xend = 17.5, yend = 2), arrow = arrow(length = unit(0.5, "cm")), color = "red")+
+  geom_hline(yintercept = c(4, 5.22449), linetype = "dashed", color = "grey")+
+  geom_vline(xintercept = c(12, 10.5), linetype = "dashed", color = "grey")+
+  annotate(geom = "point",x = 10.5, y = 5.22449, color = "red", size = 3)+
+  annotate(geom = "text", x = 10, y = 4.8,label = "P1", size = 4)
+  
+
+
+
+
+
+```
+
+## Why is P1 pareto improvement over w   
+
+Pareto improvement is defined as a reallocation strategy that makes at least one of the parties better off, without making the other party worse off. At w, based on the assumed indifference curves, there exists opportunity to make Johnny better off without making Moira worse off. Therefore w is not Pareto efficient.   
+
+However, when we move from w to P1, Moira's utility is unaffected but the utility of Johnny increases. This qualifies in accordance with the definition of a Pareto Improvement.   
+
+## What do we know about the MRS at a pareto efficient point   
+
+At the pareto efficient point, we cannot make one of the parties better off without making the other party worse off. This technically means that their indifference curves do not intersect and they are tangential to each other. Since they are tangential to each other, their slopes at the point of tangency has to be identical. The slope is estimated by their individual marginal rate of substituition(MRS). Therefore, at a pareto efficient point, their MRSs have to be equal.  
+
+## Moira: 12 wigs and 6 suits  
+
+```{r}
+moira_wigs = seq(0,16,0.1)
+m_utility_at_endow = 2 * 12^2 * 6
+moira_suits = m_utility_at_endow/(2*moira_wigs^2)
+
+johnny_wigs = 16 - moira_wigs
+j_utility_at_endow = 3 * 4 * 6
+johnny_suits = j_utility_at_endow/(3*johnny_wigs)
+
+ggplot()+
+  aes(x = moira_wigs, y = moira_suits)+
+  geom_line(color = "blue")+
+  geom_line(aes(x = 16-johnny_wigs, y = 12-johnny_suits), color = "red")+
+  theme_bw()+
+  theme(panel.grid = element_blank(),
+        axis.title=element_blank(),
+        axis.text=element_blank())+
+  scale_x_continuous(breaks = seq(0,16,2), limits = c(-2,18) )+
+  scale_y_continuous(breaks = seq(0,12,2), limits = c(-2,14))+
+  annotate(geom = "point",x = 12, y = 6, color = "red", size = 3)+
+  annotate(geom = "text", x = 12, y = 5.5,label = "w", size = 10)+
+  annotate(geom = "text", x = seq(0,16,2), y = 12.5, label = seq(16,0,-2), color = "red")+
+  annotate(geom = "text", x = seq(0,16,2), y = -0.5, label = seq(0,16,2), color = "blue")+
+  annotate(geom = "text", y = seq(0,12,2), x = 16.5, label = seq(12,0,-2), color = "red")+
+  annotate(geom = "text", y = seq(0,12,2), x = -0.5, label = seq(0,12,2), color = "blue")+
+  annotate(geom = "rect", xmin = 0, ymin = 0, xmax = 16, ymax = 12, color = "grey", fill = NA)+
+  annotate(geom = "text", x = -1, y = -1, label = "Om", color = "blue")+
+  annotate(geom = "text", x = 17, y = 13, label = "Oj", color = "red")+
+  annotate(geom = "text", x = 3, y = -1.5, label = "Moira's increasing wigs", color = "blue")+
+  geom_segment(aes(x = 6, y = -1.5, xend = 9, yend = -1.5), arrow = arrow(length = unit(0.5, "cm")), color = "blue")+
+  annotate(geom = "text", x = 13, y = 13.5, label = "Johnny's increasing wigs", color = "red")+
+  geom_segment(aes(x = 10, y = 13.5, xend = 7, yend = 13.5), arrow = arrow(length = unit(0.5, "cm")), color = "red")+
+  annotate(geom = "text", x = -1.5, y = 3, label = "Moira's increasing suits", color = "blue", angle = 90)+
+  geom_segment(aes(x = -1.5, y = 7, xend = -1.5, yend = 10), arrow = arrow(length = unit(0.5, "cm")), color = "blue")+
+  annotate(geom = "text", x = 17.5, y = 8, label = "Johnny's increasing suits", color = "red", angle = 270)+
+  geom_segment(aes(x = 17.5, y =4, xend = 17.5, yend = 2), arrow = arrow(length = unit(0.5, "cm")), color = "red")+
+  geom_hline(yintercept = c(6), linetype = "dashed", color = "grey")+
+  geom_vline(xintercept = c(12), linetype = "dashed", color = "grey")
+```
+
+
+At a pareto efficient point, their MRSs have to be the same.   
+
+MRS of Moira:   
+
+$U^M(W_M,S_M) = 2 W_M^2 S_M$   
+
+$d(U^M(W_M,S_M))/dW_M = 4 W_M S_M$   
+
+$d(U^M(W_M,S_M))/dS_M = 2 W_M^2$   
+
+$MRS_M = \frac{4 W_M S_M}{2 W_M^2}$    
+ 
+$MRS_M = \frac{2 S_M}{W_M}$    
+
+MRS of Johnny:  
+
+$U^J(W_J,S_J) = 3 W_J S_J$   
+
+$d(U^J(W_J,S_J))/dW_J = 3 S_J$   
+
+$d(U^J(W_J,S_J))/dS_J = 3 W_J$   
+
+$MRS_J = \frac{3 S_J}{3 W_J}$    
+ 
+$MRS_J = \frac{S_J}{W_J}$  
+
+We also know that,  
+
+$W_M + W_J = 16$,  
+
+Therefore $W_J = 16 - W_M$   
+
+$S_M + S_J = 12$,   
+
+Therefore $S_J = 12 - S_M$  
+
+At the Paretor efficient point, both the MRSs should be equal  
+
+$MRS_M = MRS_J$  
+
+$\frac{2 S_M}{W_M} = \frac{S_J}{W_J}$,  
+
+$\frac{2 S_M}{W_M} = \frac{12-S_M}{16 - W_M}$,  substituting $W_M$ and $S_M$
+we find that,  
+
+$\frac{2 *6}{12} \ne \frac{12-6}{16 - 12}$
+
+Hence it is not a pareto efficient allocation.   
+
+
+## Find a pareto efficient where Moira has 4 suits   
+
+Using the results from the previous part,   
+At the Paretor efficient point, both the MRSs should be equal  
+
+$MRS_M = MRS_J$  
+
+$\frac{2 S_M}{W_M} = \frac{S_J}{W_J}$,  
+
+$\frac{2 S_M}{W_M} = \frac{12-S_M}{16 - W_M}$,  substituting $S_M=4$  
+
+$\frac{2* 4}{W_M} = \frac{12-4}{16 - W_M}$,   
+
+$W_M  = 16 - W_M$,   
+
+$W_M = 16/2 = 8$  
+
+Pareto Efficient points:
+
+$W_M = 8$  
+$S_M = 4$  
+$W_J = 8$  
+$S_J = 8$  
+
+```{r}
+moira_wigs = seq(0,16,0.1)
+m_utility_at_endow = 2 * 8^2 * 4
+moira_suits = m_utility_at_endow/(2*moira_wigs^2)
+
+johnny_wigs = 16 - moira_wigs
+j_utility_at_endow = 3 * 8 * 8
+johnny_suits = j_utility_at_endow/(3*johnny_wigs)
+
+ggplot()+
+  aes(x = moira_wigs, y = moira_suits)+
+  geom_line(color = "blue")+
+  geom_line(aes(x = 16-johnny_wigs, y = 12-johnny_suits), color = "red")+
+  theme_bw()+
+  theme(panel.grid = element_blank(),
+        axis.title=element_blank(),
+        axis.text=element_blank())+
+  scale_x_continuous(breaks = seq(0,16,2), limits = c(-2,18) )+
+  scale_y_continuous(breaks = seq(0,12,2), limits = c(-2,14))+
+  annotate(geom = "point",x = 8, y = 4, color = "red", size = 3)+
+  annotate(geom = "text", x = 5.6, y = 3.2,label = "Pareto Efficient Allocation", size = 4, color = "dodgerblue")+
+  annotate(geom = "text", x = seq(0,16,2), y = 12.5, label = seq(16,0,-2), color = "red")+
+  annotate(geom = "text", x = seq(0,16,2), y = -0.5, label = seq(0,16,2), color = "blue")+
+  annotate(geom = "text", y = seq(0,12,2), x = 16.5, label = seq(12,0,-2), color = "red")+
+  annotate(geom = "text", y = seq(0,12,2), x = -0.5, label = seq(0,12,2), color = "blue")+
+  annotate(geom = "rect", xmin = 0, ymin = 0, xmax = 16, ymax = 12, color = "grey", fill = NA)+
+  annotate(geom = "text", x = -1, y = -1, label = "Om", color = "blue")+
+  annotate(geom = "text", x = 17, y = 13, label = "Oj", color = "red")+
+  annotate(geom = "text", x = 3, y = -1.5, label = "Moira's increasing wigs", color = "blue")+
+  geom_segment(aes(x = 6, y = -1.5, xend = 9, yend = -1.5), arrow = arrow(length = unit(0.5, "cm")), color = "blue")+
+  annotate(geom = "text", x = 13, y = 13.5, label = "Johnny's increasing wigs", color = "red")+
+  geom_segment(aes(x = 10, y = 13.5, xend = 7, yend = 13.5), arrow = arrow(length = unit(0.5, "cm")), color = "red")+
+  annotate(geom = "text", x = -1.5, y = 3, label = "Moira's increasing suits", color = "blue", angle = 90)+
+  geom_segment(aes(x = -1.5, y = 7, xend = -1.5, yend = 10), arrow = arrow(length = unit(0.5, "cm")), color = "blue")+
+  annotate(geom = "text", x = 17.5, y = 8, label = "Johnny's increasing suits", color = "red", angle = 270)+
+  geom_segment(aes(x = 17.5, y =4, xend = 17.5, yend = 2), arrow = arrow(length = unit(0.5, "cm")), color = "red")+
+  geom_hline(yintercept = c(4), linetype = "dashed", color = "grey")+
+  geom_vline(xintercept = c(8), linetype = "dashed", color = "grey")
+```
+
+## Underlying theorem's evaluation of the allocation   
+
+In a simple exchange economy, when the following two assumptions are met:  
+1. Perfect competition  
+2. A market exists for every commodity  
+
+an efficient pareto reallocation will emerge.   
+
+# Public Goods   
+
+## 2 criteria for public goods   
+
+1. Nonrival: Once the goods/services are provided, the additional cost to provide the same to another person should be zero.     
+2. Non-Excludable: It should almost impossible to exclude anyone from it or it should be very expensive to do so.  
+
+## Is landscaping public goods   
+
+Yes, because it meets the above two conditions. Once landscaped, the cost for an additional person to access that space is almost zero. Also, it is not possible to exclude anyone from seeing it unless the roads become private, which is clearly not the case here.  
+
+```{r}
+Q = seq(0,40)
+pm = 80 - 2*Q
+pr = 60 - 4 * Q
+
+moira_demand = data.frame(Q = Q, pm = pm) %>% 
+  mutate(curve = "moira",
+         price = ifelse(pm < 0, 0, pm)) %>% 
+  select(Q, curve, price)
+
+roland_demand = data.frame(Q = Q, pr = pr) %>% 
+  mutate(curve = "roland",
+         price = ifelse(pr < 0, NA , pr))%>% 
+  select(Q, curve, price)
+
+public_demand = data.frame(Q = Q) %>% 
+  mutate(curve = "public",
+         price = moira_demand$price + ifelse(is.na(roland_demand$price)== TRUE,0,roland_demand$price))
+
+df3 = moira_demand %>% 
+  bind_rows(roland_demand) %>% 
+  bind_rows(public_demand) %>% 
+  mutate(curve = factor(curve, levels = c("moira", "roland","public"), ordered = TRUE))
+
+df3 %>% 
+  ggplot()+
+  aes(x = Q, y = price, color = curve)+
+  geom_line()+
+  scale_y_continuous(breaks = seq(0,140,10))+
+  facet_wrap(~curve, nrow = 1)+
+  theme_bw()+
+  theme(panel.grid = element_blank())+
+  geom_abline(slope = 2,intercept = 42)+
+  labs(x = "Quantity Demanded", y = "Price", title = "Individual and Public Demand Curves and Marginal Cost",subtitle = "The black line is the marginal cost")+
+  geom_vline(xintercept = c(9.5,3,12.25), color = rep(c("red", "blue","brown"),3))
+```
+
+## Would they consider providing the public goods privately?   
+
+1. Yes, Moira would do it as long as her private demand curve matches the marginal cost.    
+80 - 2Q = 42 + 2Q; Q = 9.5 is the optimal quantity of public goods she may wish to provide privately.  
+
+2. Yes, Roland would do so similarly as follows.  
+60 - 4Q = 42 + 2Q; Q = 3 is the optimal quantity of publics goods he may wish to provide privately.   
+
+```{r}
+ggplot()+
+  theme_bw()+
+  scale_x_continuous(limits = c(-2,40), breaks = seq(0,40,10) )+
+  scale_y_continuous(limits = c(-2,140), breaks = seq(0,140,20))+
+  theme(panel.grid = element_blank())+
+  annotate(geom = "segment", x = 0, y = 140, xend = 15, yend = 50, linetype = "dashed", color = "red", size = 1)+
+  annotate(geom = "segment", x = 40, y = 0, xend = 15, yend = 50, linetype = "dashed", color = "blue", size = 1)+
+  annotate(geom = "point", x = 15, y = 50, color = "blue")+
+  annotate(geom = "text", x = 17.2, y = 54, label = "kink-point", color = "blue")+
+  annotate(geom = "text", x = 7.5, y = 85, label = "A", color = "red", size = 7)+
+  annotate(geom = "text", x = 25, y = 24, label = "B", color = "blue", size = 7)+
+  annotate(geom = "text", x = 10, y = 100, label = "slope = -6", color = "red", size = 4)+
+  annotate(geom = "text", x = 35, y = 24, label = "slope = -2", color = "blue", size = 4)+
+  annotate(geom = "text", x = -2, y = 50, label = "50", color = "blue", size = 4)+
+  annotate(geom = "text", x = 15, y = -2, label = "15", color = "blue", size = 4)+
+  geom_hline(yintercept = c(0,50), linetype = "dashed", color = "grey")+
+  geom_vline(xintercept = c(0,15), linetype = "dashed", color = "grey")+
+  labs(x = "Quantity Demanded", y = "Price", title = "Combined Public Demand", subtitle = "Red line: Both participate(A), Blueline: Only Moira participates(B)")
+  
+```
+
+## Socially optimal quantity 
+
+This is given by the point where the public demand curve meets the marginal cost.  
+140 - 6Q = 42 + 2Q; Q* = 12.25, implies p = 66.5.  
+
+
+```{r}
+ggplot()+
+  theme_bw()+
+  scale_x_continuous(limits = c(0,40), breaks = seq(0,40,10) )+
+  scale_y_continuous(limits = c(0,140), breaks = seq(0,140,20))+
+  theme(panel.grid = element_blank())+
+  annotate(geom = "segment", x = 0, y = 140, xend = 15, yend = 50, linetype = "dashed", color = "red", size = 1)+
+  annotate(geom = "segment", x = 40, y = 0, xend = 15, yend = 50, linetype = "dashed", color = "blue", size = 1)+
+  annotate(geom = "point", x = 15, y = 50, color = "blue")+
+  annotate(geom = "text", x = 17.2, y = 54, label = "kink-point", color = "blue")+
+  annotate(geom = "point", x = 12.25, y = 66.5, color = "red", size = 3)+
+  annotate(geom = "text", x = 15, y = 75, label = "Socially Optimum(Q*=12.25)", color = "red")+
+  geom_hline(yintercept = c(0,66.5), linetype = "dashed", color = "grey")+
+  geom_vline(xintercept = c(0,12.25), linetype = "dashed", color = "grey")+
+  labs(x = "Quantity Demanded", y = "Price", title = "Combined Public Demand", subtitle = "Red line: Both participate(A), Blueline: Only Moira participates(B)")+
+  geom_abline(slope = 2, intercept = 42, linetype = "dashed", color = "red")
+  
+```
+
+## Free Rider Problem  
+
+The 'free rider problem' is a type of market failure which leads to inefficient allocation of goods and services. A free rider has relatively no interest in contributing for a public good which in turn increases the price for the rest which decreases the optimal supply. This leads to a dead weight loss situation.  
+
+## Free rider and the pareto efficiency   
+
+For the public goods market, the Samuelson condition is defined as follows(taking the problem as an example):  
+
+$MRS^M + MRS^R = MRT$   
+
+$MRS^M = 80 - 12.25*2 = 55.5$  
+$MRS^R = 60 - 12.25*4 = 11$  
+
+$MRT = 42 + 12.25*2 = 66.5$
+
+Since they are equal, the allocation is optimal.  
+
+Now, lets assume Roland decides not to pay at all. In that case, the marginal cost curve doesnt change but the quantity demanded changes from an optimal 12.25 to 9.5. This reduction in the optimally available public goods is because of Roland not deciding to contribute to public goods. Similarly, if Moira decided not to contribute, then Schitt's creek will have only 3 blocked lanscaped.   
+
+
+
+
+
+
