@@ -1,0 +1,254 @@
+---
+title: "Problem Set-4"
+author: "Aravind Mannarswamy"
+date: "9/20/2021"
+output:
+  pdf_document:
+    fig_caption: yes
+    fig_height: 4
+    fig_width: 6
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+---
+
+\newpage  
+
+```{r header, echo = FALSE, message = FALSE, warning = FALSE}
+
+library(knitr)
+knitr::opts_chunk$set(cache = TRUE,
+                      echo = FALSE, 
+                      message = FALSE, 
+                      warning = FALSE, 
+                      cache.lazy = FALSE, 
+                      fig.align = "center", 
+                      fig.width = 6, 
+                      fig.height = 4)
+library(tidyverse)
+library(magrittr)
+library(scales)
+```
+
+# Alexis's tax situation  
+
+## Given  
+
+$w = 12$  
+$H = 20$  
+$L + C = 20$  
+where `L` is the hours of leisure and `C` is the hours of labor.  
+
+Assuming no taxes, Alexis could work no time and make 0, work 20 and make 20 x 12 = 240, or somewhere in between at the rate of the wage = 12, which is also the slope.      
+
+## Labor supply decision graph  
+
+```{r}
+ggplot()+
+  theme_bw()+
+  theme(panel.grid = element_blank())+
+  scale_x_continuous(limits = c(0,20), breaks = seq(0,20))+
+  scale_y_continuous(limits = c(0,240), breaks = seq(0,240,20))+
+  geom_hline(yintercept = 0,color = "grey")+
+  geom_vline(xintercept = 0,color = "grey")+
+  labs(title = "Alexis's tax situation",subtitle = "Assuming no tax",x = "Hours of leisure(L)", y = "Total Wages Earned(wH)")+
+  annotate(geom = "segment", x = 20,y = 0,xend = 0,yend = 240)+
+  annotate(geom = "segment", x = 15,y = 60,xend = 15,yend = 0, color = "grey", linetype = "dashed")+
+  annotate(geom = "segment", x = 15,y = 60,xend = 0,yend = 60, color = "grey", linetype = "dashed")+
+  annotate(geom = "text", label = "Slope = w = 12(negative)", x = 12, y = 150)
+```
+
+## Utility maximization   
+
+$MRT = 12$   
+  
+$MRS = dU_L/dU_C$    
+  
+$U = ln(C) + 3ln(L)$   
+  
+$dU_L = 3/L$   
+  
+$dU_C = 1/C$    
+  
+$C = 20 - L$   
+  
+$dU_L/dU_C = \frac{3/L}{1/C}$   
+  
+$\frac{3/L}{1/C} = 12$   
+  
+$C = 4L$   
+We also know that,    
+$C = (20-L)12$   
+$C = 240 - 12L$   
+
+Solving both the equations for `C`   
+
+$240-12L = 4L$   
+$L = 240/16$  
+$L = 15$   
+
+Alternatively,  
+
+$U = ln(C) + 3ln(L)$   
+$U = ln(20-L) + 3ln(L)$   
+At max, $dU/dL = 0$   
+
+$dU/dL = \frac{-1}{20-L} + \frac{3}{L}$   
+
+$0 = \frac{-1}{20-L} + \frac{3}{L}$   
+
+$\frac{1}{20-L} = \frac{3}{L}$   
+$4L = 60$   
+$L = 15$   
+
+## Tax situation   
+
+
+Lets get the important points:   
+1. At income = 36, hours worked = 3, L = 17   
+2. At income = 0, hours worked = 0, L = 20   
+3. At L = 0, hours worked = 20, income = (240 - 36)0.9 + 36 = 219.6
+
+```{r}
+ggplot()+
+  theme_bw()+
+  theme(panel.grid = element_blank())+
+  scale_x_continuous(limits = c(0,20), breaks = seq(0,20))+
+  scale_y_continuous(limits = c(0,240), breaks = c(seq(0,240,60),36), labels = comma_format(prefix = "$"))+
+  geom_hline(yintercept = 0,color = "grey")+
+  geom_vline(xintercept = 0,color = "grey")+
+  labs(title = "Alexis's tax situation",subtitle = "Assuming 10% tax for income over $36",x = "Hours of leisure(L)", y = "Total Wages Earned(wH)")+
+  annotate(geom = "segment", x = 20,y = 0,xend = 0,yend = 240, color = "grey")+
+  annotate(geom = "segment", x = 20,y = 0,xend = 17,yend = 36, color = "black", linetype = "dashed")+
+  annotate(geom = "segment", x = 17,y = 36,xend = 0,yend = 219.6, color = "red", linetype = "dashed")+
+  annotate(geom = "text", label = "m1 = -12", x = 19, y = 40, color = "black")+
+  annotate(geom = "text", label = "m2 = -10.8", x = 9, y = 150, color = "red")+
+  annotate(geom = "point", x = c(0,17,20), y = c(219.6,36,0), color = "dodgerblue", size = 3)+
+  annotate(geom = "segment", x = 17,y = 36,xend = 17,yend = 0, color = "grey", linetype = "dashed")+
+  annotate(geom = "segment", x = 17,y = 36,xend = 0,yend = 36, color = "grey", linetype = "dashed")
+```
+
+
+
+
+We solve this the same as before but this time, the MRT is different. The MRT will be equal to the tax slope line on the budget constraint which is equal to 10.8(negative) and the corresponding changes. Assuming that the solution lies within the taxable income:   
+
+$C = 36 + (17 - L)10.8$   
+
+$dU_L/dU_C = \frac{3/L}{1/C}$   
+  
+$\frac{3/L}{1/C} = 10.8$   
+  
+$3C/L = 10.8$   
+   
+$C = 3.6L$   
+
+Solving for L:   
+   
+$3.6L = 36 + (17 - L)10.8$   
+  
+$L = 15.25$   
+   
+Alternatively,   
+
+$U = ln(C) + 3ln(L)$   
+  
+$U = ln(219.6 - 10.8L) + 3ln(L)$   
+
+differentiating and equating to 0,  
+  
+$\frac{-10.8}{219.6-10.8L} + \frac{3}{L} = 0$   
+  
+$10.8L = 3(219.6 - 10.8L)$   
+  
+$L = 658.8/43.2$   
+  
+$L = 15.25$   
+
+Income: 3 * 12 + (4.75-3)*10.8 = 36 + 18.9 = 54.9  
+
+Taxes: 1.75 * 1.2 = 2.1   
+
+## Income and substitution effects   
+
+1. As a result of the tax, Alexis income is decreased. This should lead her to work more instead of less.   
+2. The opportunity cost of leisure has actually decreased in value due to the taxes. This reduction in taxes must compel Alexis to work less instead of more.   
+3. Based on her utility function, she values leisure more and therefore reduces her consumption
+
+
+# David's consumption tax   
+
+## Given   
+
+$P_S = 100$   
+$P_M = 25$   
+$I = 500$   
+
+With \$500, David can buy 500/25 = 20 moisturizers or 500/100 = 5 sweaters, or any traded off quantities within this budget constraint.   
+
+```{r}
+ggplot()+
+  theme_bw()+
+  theme(panel.grid = element_blank())+
+  scale_x_continuous(limits = c(0,6), breaks = seq(0,5))+
+  scale_y_continuous(limits = c(0,25), breaks = seq(0,20,2))+
+  geom_hline(yintercept = 0,color = "grey")+
+  geom_vline(xintercept = 0,color = "grey")+
+  labs(title = "David's tax situation",subtitle = "Assuming no tax",x = "No of Sweaters", y = "No of moisturizers")+
+  annotate(geom = "segment", x = 5,y = 0,xend = 0,yend = 20, color = "grey")+
+  annotate(geom = "text", x = 5, y = 20, label = "Slope = -4", color = "red")+
+  annotate(geom = "segment", x = 3, y = 8, xend = 3, yend = 0, color = "red", linetype = "dashed")+
+  annotate(geom = "segment", x = 3, y = 8, xend = 0, yend = 8, color = "red", linetype = "dashed")+
+  annotate(geom = "line", x = seq(0,5,0.1), y = sqrt(1728/seq(0,5,0.1)^3), size = 0.1)
+  
+```
+
+## Sweaters taxed  
+
+With \$25 tax on the sweaters, the effective cost is now \$125 for the sweaters. So David could buy 4 sweaters or 20 moisturizers and any tradable quantities in between.  
+
+```{r}
+ggplot()+
+  theme_bw()+
+  theme(panel.grid = element_blank())+
+  scale_x_continuous(limits = c(0,6), breaks = seq(0,5))+
+  scale_y_continuous(limits = c(0,25), breaks = seq(0,20,2))+
+  geom_hline(yintercept = 0,color = "grey")+
+  geom_vline(xintercept = 0,color = "grey")+
+  labs(title = "David's tax situation",subtitle = "Sweaters taxed at 25 per piece; blue-No tax and red-with tax",x = "No of Sweaters", y = "No of moisturizers")+
+  annotate(geom = "segment", x = 5,y = 0,xend = 0,yend = 20, color = "dodgerblue")+
+  annotate(geom = "segment", x = 4,y = 0,xend = 0,yend = 20, color = "red")+
+  annotate(geom = "text", x = 5, y = 20, label = "Slope = -4", color = "dodgerblue")+
+  annotate(geom = "text", x = 5, y = 17, label = "Slope = -5", color = "red")+
+  annotate(geom = "segment", x = 3, y = 8, xend = 3, yend = 0, color = "dodgerblue", linetype = "dashed")+
+  annotate(geom = "segment", x = 3, y = 8, xend = 0, yend = 8, color = "dodgerblue", linetype = "dashed")+
+  annotate(geom = "segment", x = 2, y = 10, xend = 2, yend = 0, color = "red", linetype = "dashed")+
+  annotate(geom = "segment", x = 2, y = 10, xend = 0, yend = 10, color = "red", linetype = "dashed")+
+  annotate(geom = "line", x = seq(2,4,0.1), y = sqrt(1728/seq(2,4,0.1)^3), size = 0.3, color = "dodgerblue")+
+  annotate(geom = "line", x = seq(1,2.5,0.1), y = (1600000/seq(1,2.5,0.1)^4)^0.2, size = 0.3, color = "red")+
+  annotate(geom = "segment", x = 2,y = 10, xend = 2, yend = 12, color = "darkgreen", size = 2)+
+  annotate(geom = "segment", x = 2, y = 12, xend = 0, yend = 12, color = "darkgreen", linetype = "dashed")+
+  annotate(geom = "segment", x = 3, y = 16, xend = 2, yend = 11, arrow = arrow(length = unit(0.25, "cm")), color = "darkgreen")+
+  annotate(geom = "text", x = 3.5, y = 17, label = "Tax = 2 moisturizers", color = "darkgreen")
+  
+```
+
+## Tax revenue   
+
+2 Sweaters at \$25 each will be \$50 in tax revenue for the government.   
+
+## Tax revenue in terms of commodity(Refer chart)
+  
+## Equivalent variation   
+
+The change in wealth due to the price change(due to taxation) at the current price(pre taxation price). Without taxes, David's wealth would have been \$500. However, with taxes he ended up with 2 sweaters(at 125 each) and 10 moisturizers a 25 each. To get the same without the taxes, he would have spend 450. There is a 50 loss in his wealth due to this tax.  
+
+
+## Excess burden   
+
+This is the difference between the overall loss in combined producer and consumer surplus to the total tax revenue(typically for the government). In other words, it is the dollar amount by which the loss exceeds the tax revenue.   
+
+## Benefits of Consumption tax   
+
+1. Its easy to collect by incorporating in every sales.  
+2. Posibility to drop other taxes.  

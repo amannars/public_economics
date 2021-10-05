@@ -1,0 +1,119 @@
+---
+title: "Problem Set-6"
+author: "Aravind Mannarswamy"
+date: "10/04/2021"
+output:
+  pdf_document:
+    fig_caption: yes
+    fig_height: 4
+    fig_width: 6
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+---
+
+\newpage  
+
+```{r header, echo = FALSE, message = FALSE, warning = FALSE}
+
+library(knitr)
+knitr::opts_chunk$set(cache = TRUE,
+                      echo = FALSE, 
+                      message = FALSE, 
+                      warning = FALSE, 
+                      cache.lazy = FALSE, 
+                      fig.align = "center", 
+                      fig.width = 6, 
+                      fig.height = 4)
+library(tidyverse)
+library(magrittr)
+library(scales)
+library(gridExtra)
+```
+
+# Retirement Problem  
+
+## Expected value of retirement   
+
+70 with 50% probability = (70-65) x 50000 x 0.5 = 125,000   
+85 with 50% probability = (70-65) x 50000 x 0.5 = 375,000  
+
+Expected value at retirement = 125,000 + 375,000 = 500,000   
+
+## Should I take the annuity   
+
+The expected value(\$500,000) is less than \$1,000,000 and therefore the annuity is not worth it. Taking it would mean that this person is risk averse.   
+
+## Risk Aversion   
+
+Risk aversion is the preference to pay more than actuarily fair market value for a scheme. In this particular case, since the annuity one time payment is more than the fair value, I should not take the offer. However, if I am risk averse, I will take up the offer and pay more than the fair value.   
+
+## Possible market failure   
+
+Asymmetry in information will lead to potential market failure. Since the person who takes the policy has more information about their expected life expectancy than the offering party, there is a potential for a moral hazard situation. Moral hazard leads to people who expect to live out way more than 85 and therefore will choose to buy this annuity offer.   
+
+## Intertemporal budget constraint   
+
+```{r}
+p1 = ggplot()+
+  theme_bw()+
+  theme(panel.grid = element_blank())+
+  scale_x_continuous(limits = c(0,3000), breaks = c(seq(0,3000,1000),2490.2,2000,1600))+
+  scale_y_continuous(limits = c(0,3000), breaks = c(seq(0,3000,1000),2540,500,908))+
+  labs(title = "Retirement Problem",subtitle = "Intertemporal Budget Constraint",x = "Current Income", y = "Future Income")+
+  geom_hline(yintercept = 0, color = "grey")+
+  geom_vline(xintercept = 0, color = "grey")+
+  geom_abline(slope = -1.02, intercept = 2540)+
+  annotate(geom = "point", x = c(0,2490.196,2000,1600,1900),y = c(2540,0,500,908,602), color = "red")+
+  annotate(geom = "segment", x = c(2000,2000,1600,1600,1900,1900),y = c(500,500,908,908,602,602),xend = c(2000,0,1600,0,1900,0), yend = c(0,500,0,908,0,602), color = "dodgerblue")+
+  annotate(geom = "text", x = 2500, y = 550, label = "w(2000,500)")+
+  annotate(geom = "text", x = 2400, y = 680, label = "R(1900,602)")+
+  annotate(geom = "text", x = 2500, y = 2000, label = "Slope = -1.02", color = "red")+
+  annotate(geom = "line", x = seq(1200,2000,1), y = sqrt(3.377005e+15/seq(1200,2000,1)^3), size = 0.1)
+p1
+```
+
+## Save 400   
+
+(Refer graph in part-5)   
+
+## Social security benefits   
+
+(Refer graph in part-5)   
+
+## Wealth substitution effect   
+
+### Wealth substitution effect   
+With Wealth substitution effect in mind, the total savings will be split between her private savings and social benefits savings. Therefore no, there will be more in retirement   
+
+### Private Savings   
+The priviate savings will be less because some of the savings now comes from the public/social savings.  
+
+## Why might crowd out funding be a bad thing   
+Because the funds that are invested doesnt go into any investment or other instruments. It is simply paid out 'as-you-go'. So the current savers pay for the elderly and when they get older, they will collect from the funds paid by the bext generation. Whereas in private savings they would have gone to investments.   
+
+
+# Davids mean tested program options   
+
+## David's budget constraint   
+
+```{r}
+
+p2 = ggplot()+
+  theme_bw()+
+  theme(panel.grid = element_blank())+
+  scale_x_continuous(limits = c(0,5400), breaks = c(seq(0,5000,1000),200,5200))+
+  scale_y_continuous(limits = c(0,1100), breaks = c(seq(0,1000,500),1040))+
+  labs(title = "Means tested Problem",subtitle = "Davids budget constraint",x = "Food", y = "Other Goods")+
+  geom_hline(yintercept = c(0,1000,1040), color = "grey")+
+  geom_vline(xintercept = c(0,200), color = "grey")+
+  annotate(geom = "segment", x = 5000, y = 0, xend = 0, yend = 1000, color = "red")+
+  annotate(geom = "segment", x = 5200, y = 0, xend = 200, yend = 1000, color = "dodgerblue", size = 0.7)+
+  annotate(geom = "segment", x = 200, y = 1000, xend = 0, yend = 1040, color = "darkgreen", size = 1)+
+  annotate(geom = "text", x = 4000, y = 800, label = "Slope = -0.2", color = "red")
+
+p2
+
+```
+
+

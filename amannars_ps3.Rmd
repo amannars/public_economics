@@ -1,0 +1,306 @@
+---
+title: "Problem Set-3"
+author: "Aravind Mannarswamy"
+date: "9/13/2021"
+output:
+  pdf_document:
+    fig_caption: yes
+    fig_height: 4
+    fig_width: 6
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+---
+
+\newpage  
+
+```{r header, echo = FALSE, message = FALSE, warning = FALSE}
+
+library(knitr)
+knitr::opts_chunk$set(cache = TRUE,
+                      echo = FALSE, 
+                      message = FALSE, 
+                      warning = FALSE, 
+                      cache.lazy = FALSE, 
+                      fig.align = "center", 
+                      fig.width = 6, 
+                      fig.height = 4)
+library(tidyverse)
+library(magrittr)
+
+```
+
+# Statutory Incidence on the producers/suppliers     
+
+
+$D: P = 95 - 4Q$  
+$S: P = 60 + Q$  
+
+
+## Graph Supply and Demand  
+```{r}
+ggplot()+
+  scale_x_continuous(name = "Quantity(in lbs)", limits = c(0,10), breaks = c(seq(0,10,2),7))+
+  scale_y_continuous(name = "Price", limits = c(50,100), breaks = c(seq(0,100,10),67,95))+
+  theme_bw()+
+  theme(panel.grid = element_blank())+
+  geom_vline(xintercept = 0, color = "grey", linetype = "dashed")+
+  annotate(geom = "segment", x = 0,y = 95,xend = 10,yend = 55, color = "red")+
+  annotate(geom = "segment", x = 0,y = 60,xend = 10,yend = 70, color = "red")+
+  annotate(geom = "segment", x = 7,y = 67,xend = 7,yend = 50, color = "blue", linetype = "dashed")+
+  annotate(geom = "segment", x = 0,y = 67,xend = 7,yend = 67, color = "blue", linetype = "dashed")+
+  labs(title = "Artisanal Goat Cheese", subtitle = "Before Taxes")+
+  annotate(geom = "polygon", x = c(0,7,0), y = c(95,67,67), fill = "yellow", alpha = 0.4)+
+  annotate(geom = "polygon", x = c(0,7,0), y = c(60,67,67), fill = "green", alpha = 0.4)+
+  annotate(geom = "text", label = "Demand Curve", x = 2.5, y = 90, color = "red")+
+  annotate(geom = "text", label = "Supply Curve", x = 2.5, y = 60, color = "red")+
+  annotate(geom = "text", label = "CS = 98", x = 1, y = 80, color = "darkblue") +
+  annotate(geom = "text", label = "PS = 24.5", x = 1, y = 65, color = "darkblue")+
+  annotate(geom = "text", label = "Optimal(Q* = 7,P* = 67)", x = 7, y = 75, color = "darkblue")
+  
+  
+  
+```
+
+## Equilibirum price and quantity  
+
+At equilibrium, the supplier and demand curves should intersect. Solving the above two equations,  
+
+$95-4Q^* = 60 + Q^*$  
+$5Q^* = 35$  
+$Q^* = 7$  
+
+\newpage  
+
+## Supply and demand with tax  
+
+```{r}
+ggplot()+
+  scale_x_continuous(name = "Quantity(in lbs)", limits = c(0,10), breaks = c(seq(0,10,2),7))+
+  scale_y_continuous(name = "Price", limits = c(50,100), breaks = c(50,60,66,71,95))+
+  theme_bw()+
+  theme(panel.grid = element_blank())+
+  geom_vline(xintercept = 0, color = "grey", linetype = "dashed")+
+  annotate(geom = "segment", x = 0,y = 95,xend = 10,yend = 55, color = "red")+
+  annotate(geom = "segment", x = 0,y = 60,xend = 10,yend = 70, color = "red")+
+  annotate(geom = "segment", x = 0,y = 65,xend = 10,yend = 75, color = "red", linetype = "dashed")+
+  annotate(geom = "segment", x = 6,y = 71,xend = 6,yend = 50, color = "blue", linetype = "dashed")+
+  annotate(geom = "segment", x = 0,y = 66,xend = 6,yend = 66, color = "blue", linetype = "dashed")+
+  annotate(geom = "segment", x = 0,y = 71,xend = 6,yend = 71, color = "blue", linetype = "dashed")+
+  labs(title = "Artisanal Goat Cheese", subtitle = "After Taxes: Tax incidence on suppliers")+
+  annotate(geom = "polygon", x = c(0,6,0), y = c(95,71,71), fill = "yellow", alpha = 0.4)+
+  annotate(geom = "polygon", x = c(0,6,0), y = c(60,66,66), fill = "green", alpha = 0.4)+
+  annotate(geom = "polygon", x = c(0,6,6,0), y = c(66,66,71,71), fill = "red", alpha = 0.4)+
+  annotate(geom = "polygon", x = c(6,7,6), y = c(66,67,71), fill = "blue", alpha = 0.2)+
+  annotate(geom = "text", label = "Demand Curve", x = 2.5, y = 90, color = "red")+
+  annotate(geom = "text", label = "Supply Curve(without tax)", x = 2.5, y = 60, color = "red")+
+  annotate(geom = "text", label = "Supply Curve(with tax)", x = 8, y = 80, color = "red")+
+  annotate(geom = "text", label = "CS = 72", x = 1, y = 80, color = "darkblue") +
+  annotate(geom = "text", label = "PS = 18", x = 1, y = 64, color = "darkblue")+
+  annotate(geom = "text", label = "Tax = 30", x = 1, y = 69, color = "darkblue")+
+  annotate(geom = "text", label = "DWL = 2.5", x = 6.8, y = 58, color = "darkblue")+
+  annotate(geom = "text", label = "Optimal(Qt* = 6,Ps* = 66, Pc* = 71)", x = 7, y = 85, color = "darkblue")+
+  annotate(geom = "segment", x = 6.8, y = 59, xend = 6.5, yend = 68, arrow = arrow(length = unit(0.25, "cm")), color = "red")+
+  annotate(geom = "segment", x = 8, y = 78, xend = 6.5, yend = 72, arrow = arrow(length = unit(0.25, "cm")), color = "red")
+  
+
+```
+
+## New equilibrium  
+
+$65+Q = 95-4Q$  
+$5Q = 30$  
+$Q = 6$  
+
+$P_c = 65+Q$  
+$P_c = 71$   
+
+$P_s = 60 + Q$  
+$P_s = 66$  
+
+## Consumer Surplus  
+
+Before tax:  $(95 - 67)*7/2 = 98$   
+After tax: $(95-71)*6/2 = 72$  
+
+## Producer Surplus  
+
+before tax:  $(67-60)*7/2 = 24.5$  
+after tax: $(66-60)*6/2 = 18$   
+
+## tax revenue  
+
+tax = $t * Q_t = 5 * 6 = 30$   
+
+## Dead weight loss   
+
+Method-1:  
+$DWL = PS + CS - PS_t - CS_t - tax$   
+$DWL = 98 + 24.5 - 72 - 18 - 30 = 2.5$   
+
+Method-2:  
+$DWL = (71-66)*1/2 = 2.5$  
+
+## Who pays the tax   
+
+1. The consumer pays the tax regardless of the optics  
+2. The only situation where the producer will bear the tax is when they have no control over the quantity produced, in other words when the supply is INELASTIC  
+
+# Story of a monopolist  
+
+
+```{r}
+Qo = seq(0,20,0.1)
+Do = 48 - Qo
+Co = 28 + 4*Qo + Qo^2
+MCo = 4 + 2*Qo
+MRo = 48 - 2*Qo
+
+df = data.frame(Qo = Qo, Do = Do, MCo = MCo, MRo = MRo) %>% 
+  pivot_longer(!Qo, names_to = 'type', values_to = 'cost')
+
+df %>% 
+  ggplot()+
+  theme_bw()+
+  theme(panel.grid = element_blank(),
+        legend.title = element_blank())+
+  aes(x = Qo,y = cost, color = type, group = type)+
+  geom_line()+
+  scale_x_continuous(limits = c(0,22), breaks = c(0,5,10,11,15,20))+
+  scale_y_continuous(limits = c(0,50), breaks = c(0,10,20,30,37, 40, 50))+
+  annotate(geom = "segment", x = 11,y = 37,xend = 11,yend = 0, color = "blue", linetype = "dashed")+
+  annotate(geom = "segment", x = 0,y = 37,xend = 11,yend = 37, color = "blue", linetype = "dashed")+
+  labs(x = "Quantity", y = "Price", title = "Monopolist",subtitle = "Before tax situation")
+```
+
+## Price and Quantity   
+
+Price = P  
+Quantity = Q  
+Demand: $P = 48 - Q$  
+Cost: $C = 28 + 4Q + Q^2$  
+Marginal Cost: $MC = 4 + 2Q$  
+Revenue: $R = PQ$  
+$R = 48Q - Q^2$  
+Marginal Revenue: $MR = 48 - 2Q$  
+  
+At equilibrium, MR = MC  
+
+$48 - 2Q = 4 + 2Q$  
+$Q = 11$   
+
+## profit without taxes  
+
+Profit = Revenue - Cost  
+$\pi = R - C$  
+$\pi = 48Q - Q^2 - 28 - 4Q - Q^2$  
+$\pi = -2Q^2 + 44Q - 28$  
+$\pi = 214$  
+
+
+```{r}
+Qo = seq(0,20,0.1)
+Do = 48 - Qo
+Co = 28 + 4*Qo + Qo^2
+MCo = 4 + 2*Qo
+MRo = 48 - 2*Qo
+MCt = 8 + 2*Qo
+
+df = data.frame(Qo = Qo, Do = Do, MCo = MCo, MRo = MRo, MCt = MCt) %>% 
+  pivot_longer(!Qo, names_to = 'type', values_to = 'cost')
+
+df %>% 
+  ggplot()+
+  theme_bw()+
+  theme(panel.grid = element_blank(),
+        legend.title = element_blank())+
+  aes(x = Qo,y = cost, color = type, group = type)+
+  geom_line()+
+  scale_x_continuous(limits = c(0,22), breaks = c(0,5,10,11,15,20))+
+  scale_y_continuous(limits = c(0,50), breaks = c(0,10,20,30,38, 40, 50))+
+  annotate(geom = "segment", x = 11,y = 37,xend = 11,yend = 0, color = "blue", linetype = "dashed")+
+  annotate(geom = "segment", x = 0,y = 37,xend = 11,yend = 37, color = "blue", linetype = "dashed")+
+  annotate(geom = "segment", x = 10,y = 38,xend = 10,yend = 0, color = "blue", linetype = "dashed")+
+  annotate(geom = "segment", x = 0,y = 38,xend = 10,yend = 38, color = "blue", linetype = "dashed")+
+  labs(x = "Quantity", y = "Price", title = "Monopolist",subtitle = "With tax situation: On producers")
+```
+
+## Taxes - statutory and economic incidence   
+
+1. Statutory incidence in this case is the producer, as they are legally responsible for the tax  
+2. Economic incidence however is shared between the producer and the customer(see the final answer). The producer pays 3 while the customer pays 1. In addition to that, the producer also suffers loss of quantity sold, thereby impacting the revenue even further.  
+
+$t = 4$  
+$C_t = 28 + 4Q + Q^2 + 4Q$  
+$C_t = 28 + 8Q + Q^2$   
+$MC_t = 8 + 2Q$  
+
+## Equilibrium with taxes     
+
+$MR = MC_t$  
+$48-2Q_t = 8 + 2Q_t$  
+
+$Q_t = 10$  
+$P_t = 48 - Q_t$  
+$P_t = 38$  
+
+## Profit with taxes   
+
+Profit = Revenue - Cost  
+$\pi = R_t - C_t$  
+$\pi = 38*10 - (28+8Q_t+Q_t^2)$  
+$\pi = 172$    
+
+## Statutory incidence on the customer   
+
+$P = 48 - Q - 4$  
+$P_t = 44 - Q$  
+Revenue; $P_tQ = 44Q - Q^2$   
+Marginal Revenue: $MR_t = 44 - 2Q$   
+Cost: $C = 28 + 4Q + Q^2$  
+Marginal Cost: $MC = 4 + 2Q$  
+
+At equilibirum;  
+
+$4 + 2Q = 44 - 2Q$  
+$Q_t = 10$   
+$P_c = 38$   
+$P_s = 34$
+
+```{r}
+Qo = seq(0,20,0.1)
+Do = 48 - Qo
+Dt = 44 - Qo
+Co = 28 + 4*Qo + Qo^2
+MCo = 4 + 2*Qo
+MRo = 48 - 2*Qo
+#MCt = 8 + 2*Qo
+MRt = 44 - 2*Qo 
+
+df = data.frame(Qo = Qo, Do = Do,Dt = Dt, MCo = MCo, MRo = MRo, MRt = MRt) %>% 
+  pivot_longer(!Qo, names_to = 'type', values_to = 'cost')
+
+df %>% 
+  ggplot()+
+  theme_bw()+
+  theme(panel.grid = element_blank(),
+        legend.title = element_blank())+
+  aes(x = Qo,y = cost, color = type, group = type)+
+  geom_line()+
+  scale_x_continuous(limits = c(0,22), breaks = c(0,5,10,11,15,20))+
+  scale_y_continuous(limits = c(0,50), breaks = c(0,10,20,30,38, 40, 50))+
+  annotate(geom = "segment", x = 11,y = 37,xend = 11,yend = 0, color = "blue", linetype = "dashed")+
+  annotate(geom = "segment", x = 0,y = 37,xend = 11,yend = 37, color = "blue", linetype = "dashed")+
+  annotate(geom = "segment", x = 10,y = 38,xend = 10,yend = 0, color = "blue", linetype = "dashed")+
+  annotate(geom = "segment", x = 0,y = 38,xend = 10,yend = 38, color = "blue", linetype = "dashed")+
+  labs(x = "Quantity", y = "Price", title = "Monopolist",subtitle = "With tax situation: On Consumers")
+```
+
+Regardless of the consumer incidence or the monopolist, the answers are the same.  
+
+## Monopolist profit with tax   
+
+$R = PQ$; $R = 34 * 10$; $R = 340$   
+$C = 28 + 4Q + Q^2$; $C = 168$; $\pi_t = 340 - 168$   
+$\pi_t = 172$   
+So nothing changes with regard to who the statutory incidence falls under,   

@@ -1,0 +1,201 @@
+---
+title: "Problem Set-5"
+author: "Aravind Mannarswamy"
+date: "9/27/2021"
+output:
+  pdf_document:
+    fig_caption: yes
+    fig_height: 4
+    fig_width: 6
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+---
+
+\newpage  
+
+```{r header, echo = FALSE, message = FALSE, warning = FALSE}
+
+library(knitr)
+knitr::opts_chunk$set(cache = TRUE,
+                      echo = FALSE, 
+                      message = FALSE, 
+                      warning = FALSE, 
+                      cache.lazy = FALSE, 
+                      fig.align = "center", 
+                      fig.width = 6, 
+                      fig.height = 4)
+library(tidyverse)
+library(magrittr)
+library(scales)
+library(gridExtra)
+```
+
+
+# Schitt's Creek Recreation   
+
+## Benefits of immigration of high skilled workers   
+1. Fills critical labor gaps in advanced technology and STEM jobs    
+2. Instrumental in creating jobs and improving the economy   
+3. They often go to US Universities thereby funding higher education for US  
+
+
+## Project's admissibility   
+
+A project is admissible if and only if the net return on the investment is positive.   
+
+$PV = -10000$   
+$r = 0.03$  
+$R = 12000$    
+
+$PV_R = 12000/1.03$  
+$PV_R = 11650.49$   
+$PV + PV_R = -10000 + 11650.49 > 0$   
+
+Hence the project is admissible.   
+
+
+## Project selection   
+
+The present value of a future payment can be calculated as   
+
+$PV = FV/(1+r)^n$   
+
+```{r}
+df = data.frame(Year = c(0,1,2), Bike_park = c(-10000, 13000, 18000), Whitewater = c(-12000, 15000, 18000)) %>% 
+  mutate(Bike_park_pv = Bike_park/(1.03^Year),
+         Whitewater_pv = Whitewater/(1.03^Year))
+df
+```
+
+Net Return of Bike Park: `r sum(df$Bike_park_pv)`   
+Net Return of White water Park: `r sum(df$Whitewater_pv)`    
+They are relatively close but the town should choose `Bike Park`.  
+
+
+
+## Considerations on cost vs benefit   
+
+1. Market price: The amount that normal consumers pay for goods. This can be used as an anchor for price level.    
+2. Shadow price: Adjusting market prices to capture the true price levels     
+3. Consumer Surplus: Since the size of the projects are big, there may be other parties benefiting from it      
+4. Inferred Costs and benefits
+
+
+# Two polluters   
+
+## Cost of pollution reduction   
+
+$MC_1 = e_1$   
+$MC_2 = 2e_2$   
+
+Where `e1` and `e2` are the amounts of emissions reduced by the 1st and 2nd firms respectively.   
+
+In the absense of intervention,   
+Firm-1: 300 units  
+Firm-2: 300 units  
+ 
+```{r}
+p1 = ggplot()+
+  theme_bw()+
+  theme(panel.grid = element_blank())+
+  scale_x_continuous(limits = c(0,300), breaks = seq(0,600,60))+
+  scale_y_continuous(limits = c(0,600), breaks = seq(0,600,60))+
+  labs(title = "Cost of reducing pollution",subtitle = "Firm-1",x = "Units of Pollutant", y = "Marginal Cost")+
+  annotate(geom = "segment", x = 0, y = 0, xend = 300, yend = 300, color = "red")+
+  annotate(geom = "polygon", x = c(0,60,60,0), y = c(0,0,60,0), fill = "red", alpha = 0.5)+
+  geom_hline(yintercept = 60, linetype = "dashed", color = "grey")
+
+p2 = ggplot()+
+  theme_bw()+
+  theme(panel.grid = element_blank())+
+  scale_x_continuous(limits = c(0,300), breaks = seq(0,600,60))+
+  scale_y_continuous(limits = c(0,600), breaks = seq(0,600,60))+
+  labs(title = "Cost of reducing pollution",subtitle = "Firm-2",x = "Units of Pollutant", y = "Marginal Cost")+
+  annotate(geom = "segment", x = 0, y = 0, xend = 300, yend = 600, color = "red")+
+  annotate(geom = "polygon", x = c(0,60,60,0), y = c(0,0,120,0), fill = "red", alpha = 0.5)+
+  geom_hline(yintercept = 120, linetype = "dashed", color = "grey")
+grid.arrange(p1, p2, nrow = 1)
+```
+
+Cost for Firm-1 = 0.5 x 60 x 60 = 1800   
+Cost for Firm-2 = 0.5 x 60 x 120 = 3600   
+
+
+## How much to cut pollution   
+
+$MC_1 = MC_2$   
+
+$e_1 = 2e_2$   
+
+$e_2/e_1 = 0.5$    
+
+$e_1 + e_2 = 120$   
+
+$2e_2 + e_2 = 120$   
+
+$e_2 = 40$   
+
+$e_1 = 80$   
+
+
+## Emissions Fee   
+
+$f* = MC_1(e_1^*)$   
+
+$f* = 80$  
+
+Firm-1 pollutes: 300 - 80 = 220 units at 80 per unit   
+Firm-2 pollutes: 300 - 40 = 260 units at 80 per unit   
+
+Firm-1 Fee = 220 x 80 = 17600   
+Firm-2 Fee = 260 x 80 = 20800   
+
+## Tradeable permits   
+
+Firm-1: Has 180 permits but needs 220 permits. Firm-1 is 40 permits short   
+Firm-2: Has 300 permits but needs 260 permits. Firm-2 has 40 extra permits from the optimal solution.  
+
+Firm-1 will buy 40 permits from Firm-2 in this instance.   
+
+Min price = f* = 80   
+Min paid = 80 x 40 = 3200   
+
+and the optimal solution point will be maintained   
+
+## Emissions fee or cap-and-trade   
+
+$MC_1 = MC_2$   
+
+$e_1 = 4e_2$   
+
+$e_2/e_1 = 0.25$    
+
+$e_1 + e_2 = 120$   
+
+$4e_2 + e_2 = 120$   
+
+$e_2 = 24$   
+
+$e_1 = 96$   
+
+Emissions Fee   
+
+$f* = MC_1(e_1^*)$   
+
+$f* = 96$   
+
+Firm-1 pollutes: 300 - 24 = 276 units at 96 per unit   
+Firm-2 pollutes: 300 - 96 = 204 units at 96 per unit   
+
+Firm-1 Fee = 276 x 96 = 26496   
+Firm-2 Fee = 204 x 96 = 19584    
+
+
+1. Under cap and trade, the pollution reduction for Firm-2 is should be 40 while that under the emissions fee, it will be about 24 units of pollution reduction.  
+2. For this reason, Cap-and-trade is a better option for reducing pollution instead of Emissions fee.  
+
+
+
+
+

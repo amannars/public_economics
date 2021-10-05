@@ -1,0 +1,251 @@
+---
+title: "Problem Set-2"
+author: "Aravind Mannarswamy"
+date: "9/06/2021"
+output:
+  pdf_document:
+    fig_caption: yes
+    fig_height: 4
+    fig_width: 6
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+---
+
+\newpage  
+
+# Play at Schitt's Creek  
+
+
+```{r header, echo = FALSE, message = FALSE, warning = FALSE}
+
+library(knitr)
+knitr::opts_chunk$set(cache = TRUE,
+                      echo = FALSE, 
+                      message = FALSE, 
+                      warning = FALSE, 
+                      cache.lazy = FALSE, 
+                      fig.align = "center", 
+                      fig.width = 6, 
+                      fig.height = 4)
+library(tidyverse)
+library(magrittr)
+
+```
+
+
+$U^i = 2k_i^2 + r^2$    
+
+`k` is the private good, candles;   
+`r` is the public good, plays;  
+
+Individually, their utilities with the subscript can be given as follows:
+
+For Stevie, $U^S = 2k_S^2 + r^2$    
+For Moira, $U^M = 2k_M^2 + r^2$  
+
+and `r` itself can be written as $r = r_S + r_M$   
+
+Their incomes are equal $I_S = I_M = 24$  
+
+Also given is that,  
+
+$P_k = 1$ and   
+$P_r = 1$   
+
+Based on what we know so far, here are the budget constraints:  
+
+$k_S + r_S = 24$ and  
+$k_M + r_M = 24$    
+  
+## Criteria for public good   
+
+It meets the following two conditions:  
+1. Nonrival: Because adding another person to witness the play is not going to increase the cost.   
+2. Non excludable: Because once provided, in an outdoor setting, it is not possible to exclude anyone.    
+
+## How many plays will they provide   
+
+Eliminating the private goods using the budget constraints,   
+
+For Stevie, $U^S = 2(24 - r_S)^2 + (r_S + r_M)^2$    
+  
+$dU^S/dr_S = 4(24 - r_S)(-1) + 2(r_S + r_M)$      
+  
+at optimal, this derivative is equal to zero.  
+
+$4(24-r_S) = 2(r_S + r_M)$   
+
+$2(24 - r_S) = (r_S + r_M)$   
+
+$48 - 2r_S = r_S+ r_M$  
+
+$48 - r_M = 3r_S$   
+
+By Symmetry,   
+
+$48 - r_S = 3r_M$  
+
+After some more algebra,  
+
+$r_S = 12$  
+$r_M = 12$  
+$r = 24$   
+
+Therefore, $K_S = 12$ and $K_M = 12$
+
+Each by themselves, they would have choose to provide 12 plays each and the total to the town would be 24 plays.  
+
+## Shortfall   
+
+If the socially optimal number of plays is 28, then the town will be short by 4 plays as Stevie and Moira together would finance 24 plays.  
+
+## Only if Stewie and Moira had known before   
+
+In this particular setting,   
+
+$r = r_S + r_M + 4$   
+
+For Stevie, 
+$U^S = 2(24 - r_S)^2 + (r_S + r_M + 4)^2$    
+
+$d U^S/dr_S = -4(24-r_S) + 2(r_M + r_S + 4)$ should be equal to zero at optimal   
+
+$4(24-r_S) = 2(r_M + r_S + 4)$   
+
+$48 - 2r_S = r_M + r_S + 4$   
+
+$r_S = (44 - r_M)/3$   
+
+By symmetry,   
+
+$r_M = (44-r_S)/3$   
+
+Solving, we get   
+
+$r_S = 11$  
+$r_M = 11$   
+
+And in total they will provide 22 plays. So with the town providing the expected shortfall of 4, there will be a total of 26 plays! Well, this is not good. So Steve and Moira having that additional information didnt help the town to achieve the optimal number of plays.   
+
+
+
+# Bob has a motorcycle!   
+
+$MPC = 10$  
+
+$MB = 30 - 4Q$   
+
+
+## Bob's private solution   
+
+Bob will try to maximize his utility by optimizing to a point where the marginal costs and benefits are the same. In other words, he will stop paying for more when it is not worth the cost.  
+
+$MPC = MB$   
+
+$10 = 30 - 4Q$   
+
+$Q = 5$   
+
+Bob would prefer to ride 5 miles!   
+
+## Marginal Social Cost   
+
+Social Cost is the sum of the private cost of the individual(who also reaps benefit) and the rest of the society.  
+
+Social Cost = Marginal Private Cost + Marginal Damage  
+
+$MSC = MPC + MD$  
+
+$MSC = 10 + 5 + Q$   
+
+$MSC = 15 + Q$  
+
+## Socially Optimal Solution   
+
+Taking the social cost into account,   
+
+$MSC = MB$  
+
+$Q + 15 = 30 - 4Q$  
+
+$Q = 3$   
+
+Bob should ride 3 miles for a socially optimal solution.  
+
+
+## Graph the scenario   
+
+```{r}
+library(ggplot2)
+# function to invoke a plot object
+ggplot()+ 
+  # Set x-axis limit
+  scale_x_continuous(limits = c(0,10), breaks = seq(0,10))+
+  # Set y-axis limit
+  scale_y_continuous(limits = c(0,30), breaks = c(seq(0,30,5),18))+
+  # I like plain background(instead of default grey)
+  theme_bw()+
+  # I dont like the gridlines in the background for this chart
+  theme(panel.grid = element_blank())+
+  # to draw a straight line, we need x1,y1 and x2,y2
+  annotate(geom = "segment", x = 0, y = 0, xend = 10, yend = 0, color = "grey")+
+  # to draw a straight line, we need x1,y1 and x2,y2; also changing linetype
+  annotate(geom = "segment", x = 0, y = 10, xend = 10, yend = 10, color = "darkgreen", linetype = "dashed")+
+  # to draw a straight line, we need x1,y1 and x2,y2; the next 5 lines are just straight lines
+  annotate(geom = "segment", x = 0, y = 30, xend = 7.5, yend = 0, color = "red", linetype = "dashed")+
+  annotate(geom = "segment", x = 0, y = 15, xend = 5, yend = 20, color = "dodgerblue", linetype = "dashed")+
+  annotate(geom = "segment", x = 5, y = 20, xend = 5, yend = 0, color = "grey", linetype = "dashed")+
+  annotate(geom = "segment", x = 3, y = 18, xend = 3, yend = 0, color = "grey", linetype = "dashed")+
+  annotate(geom = "segment", x = 0, y = 18, xend = 3, yend = 18, color = "grey", linetype = "dashed")+
+  # How about labeling the chart and axes
+  labs(x = "Quantity(Q)", y = "Price/Cost", title = "Bob and his motorcycle")+
+  # Shaded region. Specify the closed vertices and the color and the intensity of the color
+  annotate(geom = "polygon", x = c(3,3,5), y = c(18,10,10), fill = "yellow", alpha = 0.4)+
+  annotate(geom = "polygon", x = c(3,5,5), y = c(18,20,10), fill = "dodgerblue", alpha = 0.4)+
+  # Place the text in x,y coordinate and give the text
+  annotate(geom = "text", label = "MPC", x = 9, y = 11, color = "darkgreen")+
+  annotate(geom = "text", label = "MB", x = 1, y = 28, color = "red")+
+  annotate(geom = "text", label = "MSC", x = 1, y = 15, color = "dodgerblue")+
+  annotate(geom = "text", label = "8", x = 3.5, y = 12, color = "black")+
+  annotate(geom = "text", label = "10", x = 4.5, y = 16, color = "black")
+
+```
+
+
+## Bob's loss   
+
+
+The shaded traingle(yellow) represents Bob's loss and that is given as follows:  
+
+Bobs Loss = 0.5 * (5-3) * (18 - 10) = 8 units   
+
+Bob really loses this as a *surplus*  
+
+
+## Community gain   
+
+The community gains when Bob rides fewer miles, fewer than 5 to be specific in this instance.   
+
+If Bob rides 5 miles, Societal loss(incl Bob) = 50(from Bob) + 37.5(by the rest)  = 87.5  
+If Bob rides 3 miles, Societal loss(incl Bob) = 30(from Bob) + 19.5(by the rest) = 49.5   
+
+Hence, the society has avoided a loss of 87.5 - 49.5 = 38
+
+But this 38 also contains Bob's surplus loss of 8 units, and his cost of 20 if he would have driven the additional 2 miles.   
+
+Hence, the net gain for the society is 38 - 20 - 8 = 10 units!
+
+Alternatively, the same solution can be found by finding the area of the triangle shaded in blue(0.5 * (5-3)*(20-10)).   
+
+here is detailed summary:   
+
+Total avoided loss/damage to the town:  18 = 0.5 * (8 + 10) * (5-3);   
+Bob's lost surplus in this 18 units = 8   
+Net towns gain = 18 - 8 = 10
+
+
+
+
+
+
